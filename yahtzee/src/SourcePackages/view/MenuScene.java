@@ -1,5 +1,6 @@
 package SourcePackages.view;
 
+import SourcePackages.controller.Game;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -26,7 +27,7 @@ public class MenuScene {
 
         Button start = new Button("Start!");
         start.setOnAction(e -> {
-            new GameScene(window);
+            new Game(window);
         });
 
 

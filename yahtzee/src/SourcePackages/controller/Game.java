@@ -1,20 +1,30 @@
 package SourcePackages.controller;
 
+import SourcePackages.model.User;
+import SourcePackages.view.GameScene;
+import javafx.stage.Stage;
+
 /**
  * Created by Heron on 5/8/2017.
  */
 public class Game {
-    int userScore;
-    int computerScore;
+    Stage window;
+    GameScene view;
+    User human;
+    User computer;
 
-    public Game(){
-        this.initScore();
+    public Game(Stage window){
+        this.window = window;
+        this.initGame();
     }
-    private void initScore(){
-        this.userScore = 0;
-        this.computerScore = 0;
+    private void initGame(){
+        this.human = new User();
+        this.computer = new User();
+        User[] users = {this.human,this.computer};
+
+        this.view = new GameScene(window, users);
+
+
     }
-    public int getScore(){
-        return this.userScore;
-    }
+
 }

@@ -1,5 +1,6 @@
 package SourcePackages;
 
+import SourcePackages.controller.Menu;
 import SourcePackages.view.MenuScene;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -20,7 +21,7 @@ public class Main extends Application{
     public void start(Stage primaryStage) throws Exception {
         window = primaryStage;
 
-        new MenuScene(window);
+        new Menu(window);
 
         window.setOnCloseRequest( e ->{
             window.close();
