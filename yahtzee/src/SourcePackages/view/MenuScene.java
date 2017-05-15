@@ -1,10 +1,12 @@
 package SourcePackages.view;
 
 import SourcePackages.controller.Game;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -14,7 +16,11 @@ import javafx.stage.Stage;
  * Created by Heron on 5/8/2017.
  */
 public class MenuScene {
+    Stage window;
+    boolean usernameEntered = false;
+    String username;
     public MenuScene(Stage window) {
+        this.window = window;
         //menu
         Label w = new Label("Welcome");
         w.setAlignment(Pos.CENTER);
@@ -25,26 +31,40 @@ public class MenuScene {
         Label h = new Label("Ha-yahtzee");
         h.setAlignment(Pos.CENTER);
 
-        Button start = new Button("Start!");
-        start.setOnAction(e -> {
-            new Game(window);
-        });
-
+        VBox vb = getCenterContent();
 
         //layouts
         VBox welcomeTextContainer = new VBox(5);
         welcomeTextContainer.getChildren().addAll(w, t, h);
         welcomeTextContainer.setAlignment(Pos.CENTER);
 
-        StackPane sp = new StackPane();
-        sp.getChildren().add(start);
-
         BorderPane bp = new BorderPane();
         bp.setTop(welcomeTextContainer);
-        bp.setCenter(sp);
+        bp.setCenter(vb);
 
         Scene scene = new Scene(bp, 400, 400);
 
         window.setScene(scene);
+    }
+    private VBox getCenterContent(){
+        VBox vb = new VBox();
+        vb.setAlignment(Pos.CENTER);
+        if(!usernameEntered) {
+            TextField tf = new TextField();
+            Button btn = new Button("Submit Name");
+            btn.setOnAction(e -> {
+                username = tf.getText();
+                usernameEntered = true;
+                getCenterContent();
+                vb.getChildren().clear();
+                Button go = new Button("Let's Play");
+                go.setOnAction(ex -> {
+                    new Game(window,username);
+                });
+                vb.getChildren().add(go);
+            });
+            vb.getChildren().addAll(tf,btn);
+        }
+        return vb;
     }
 }

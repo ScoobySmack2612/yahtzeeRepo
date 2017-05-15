@@ -8,15 +8,17 @@ import javafx.collections.ObservableMap;
  */
 public class UpperSection {
     String[] combos = {"Ones", "Twos", "Threes","Fours","Fives","Sixes"};
+    ObservableMap<String, Integer> combosAndScores = FXCollections.observableHashMap();
 
-    ObservableMap<String, Integer> scores = FXCollections.observableHashMap();
+
     public UpperSection(){
         this.initScores();
     }
     private void initScores(){
-        for (String combo: this.combos ){
-            scores.put(combo, 0);
+        for (int x = 0; x < combos.length; x++ ){
+            combosAndScores.put(combos[x],0);
         }
     }
-    public ObservableMap<String, Integer> getScores(){return this.scores;}
+    public String[] upperKeys(){return this.combos;}
+    public ObservableMap<String, Integer> getUpperCombosAndScores(){return this.combosAndScores;}
 }

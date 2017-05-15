@@ -1,0 +1,12 @@
+.sectionComboAndScore{
+    -fx-border-color: black;
+    -fx-border-width:1 0 1 1;
+    -fx-border-style: solid;
+}
+.scorebox {
+    -fx-background-color: radial-gradient(radius 180%, red, derive(red, -30%), derive(burlywood, 30%));;
+    -fx-border-color: black;
+    -fx-border-width: 0 1 0 1;
+    -fx-border-style: solid;
+    -fx-min-width:20;
+}

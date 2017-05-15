@@ -15,8 +15,9 @@ public class LowerSection {
     }
     private void initScores(){
         for (String combo: this.combos ){
-            scores.put(combo, 0);
+            scores.putIfAbsent(combo, 0);
         }
     }
+    public String[] lowerKeys(){return this.combos;}
     public ObservableMap<String, Integer> getScores(){return this.scores;}
 }
