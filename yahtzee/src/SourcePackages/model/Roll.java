@@ -1,5 +1,6 @@
 package SourcePackages.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,7 +8,7 @@ import java.util.Map;
  * Created by Heron on 5/15/2017.
  */
 public class Roll {
-    Map<Integer, Dice> roll = new HashMap<>();
+    ArrayList<Dice> roll = new ArrayList<>();
     public Roll(){
         this.initRoll();
     }
@@ -15,13 +16,15 @@ public class Roll {
         this.randomRoll();
     }
     private void randomRoll(){
-        for (int x = 0; x < 6; x ++){
-            int rand =(int)(Math.random()*((5-1)+1)+1);
-            Dice dice = new Dice(rand);
+        for (int x = 1; x < 6; x ++){
+            int rand =(int)(Math.random()*((6-1)+1)+1);
+            Dice dice = new Dice(rand,x);
 
-            roll.put(dice.getValue(),dice);
-            //System.out.println(dice.getValue());
+            roll.add(dice);
+
+            //First output -- shows all five dice values
+            System.out.println(dice.getValue());
         }
     }
-    public Map<Integer,Dice> getRoll(){return this.roll;}
+    public ArrayList<Dice> getRoll(){return this.roll;}
 }

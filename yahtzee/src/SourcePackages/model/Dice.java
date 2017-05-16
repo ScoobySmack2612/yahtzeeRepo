@@ -12,14 +12,19 @@ public class Dice extends Rectangle{
     int value;
     ImagePattern image;
     ImagePattern[] diceImg = { new ImagePattern(new Image(getClass().getResource("../img/d1.png").toExternalForm())),new ImagePattern(new Image(getClass().getResource("../img/d2.png").toExternalForm())),new ImagePattern(new Image(getClass().getResource("../img/d3.png").toExternalForm())),new ImagePattern(new Image(getClass().getResource("../img/d4.png").toExternalForm())),new ImagePattern(new Image(getClass().getResource("../img/d5.png").toExternalForm())),new ImagePattern(new Image(getClass().getResource("../img/d6.png").toExternalForm()))};
+    String clicked;
 
-    public Dice(int value){
+    public Dice(int value, int positionInRoll){
         this.value = value;
         this.image = diceImg[this.value-1];
         this.setFill(image);
-        this.setWidth(75);
-        this.setHeight(75);
+        this.setWidth(50);
+        this.setHeight(50);
+        this.setId(Integer.toString(positionInRoll));
+        this.setOnMouseClicked( e ->{
+            clicked = this.getId();
+        });
     }
     public int getValue(){return this.value;}
-
+    public String getClicked(){System.out.println(clicked);return this.clicked;}
 }
