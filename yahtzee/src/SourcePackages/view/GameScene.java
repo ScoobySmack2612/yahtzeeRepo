@@ -8,7 +8,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import java.util.ArrayList;
 
@@ -22,12 +21,12 @@ public class GameScene {
     Scene scene;
     boolean init = true;
     Game controller;
-    Dice dieObject;
-    public GameScene(Stage window, User[] users, Game controller,Dice dice){
+    ArrayList<Dice> die = new ArrayList<>();
+    public GameScene(Stage window, User[] users, Game controller,ArrayList<Dice> die){
         this.window = window;
         this.users = users;
         this.controller = controller;
-        this.dieObject = dice;
+        this.die = die;
 
         BorderPane bp = new BorderPane();
         scene = new Scene(bp,400,600);
@@ -39,13 +38,12 @@ public class GameScene {
         }
 
         init = false;
-        ArrayList<Rectangle> die = this.randomizeDie();
-        HBox diceSection = this.renderDie(die);
+        HBox diceSection = this.renderDie();
         bp.setCenter(scorecards);
         bp.setBottom(diceSection);
 
         window.setScene(scene);
-        window.setResizable(false);
+        //window.setResizable(false);
     }
     private VBox createScoreCard(User user){
         scene.getStylesheets().add(getClass().getResource("../css/gamescene.css").toExternalForm());
@@ -132,12 +130,9 @@ public class GameScene {
         }
         return lowerSectionCombos;
     }
-    private ArrayList<Rectangle> randomizeDie(){
-        return controller.getDie();
-    }
-    private HBox renderDie(ArrayList<Rectangle> die){
+    private HBox renderDie(){
         HBox result = new HBox(5);
-        for (Rectangle dice : die){
+        for (Dice dice : die){
             result.getChildren().add(dice);
         }
         return result;
