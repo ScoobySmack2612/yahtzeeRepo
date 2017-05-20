@@ -1,11 +1,13 @@
 package SourcePackages.view;
 
-import SourcePackages.controller.Game;
-import SourcePackages.model.Dice;
+import SourcePackages.controller.GameController;
+import SourcePackages.controller.SubControllers.Dice;
 import SourcePackages.model.User;
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -20,36 +22,44 @@ public class GameScene {
     User[] users;
     Scene scene;
     boolean init = true;
-    Game controller;
-    ArrayList<Dice> die = new ArrayList<>();
-    public GameScene(Stage window, User[] users, Game controller,ArrayList<Dice> die){
+    GameController controller;
+    Button roll,play;
+    public GameScene(Stage window, User[] users, GameController controller){
         this.window = window;
         this.users = users;
         this.controller = controller;
-        this.die = die;
 
         BorderPane bp = new BorderPane();
         scene = new Scene(bp,400,600);
+
         HBox scorecards = new HBox();
         scorecards.setAlignment(Pos.CENTER);
-        for (User user : users){
+        for (User user : this.users){
             VBox scoreCard = this.createScoreCard(user);
             scorecards.getChildren().add(scoreCard);
         }
 
         init = false;
+        /*HBox input = this.getInputOptions();
+        input.setAlignment(Pos.CENTER);
         HBox diceSection = this.renderDie();
+
+        VBox inAndDie = new VBox();
+        inAndDie.getChildren().addAll(diceSection,input);
+        */
         bp.setCenter(scorecards);
-        bp.setBottom(diceSection);
+        //bp.setBottom(inAndDie);
 
         window.setScene(scene);
-        //window.setResizable(false);
     }
     private VBox createScoreCard(User user){
         scene.getStylesheets().add(getClass().getResource("../css/gamescene.css").toExternalForm());
+
         VBox result = new VBox();
+        result.setId(user.getName());
         result.setPadding(new Insets(0,25,0,25));
         result.setStyle("-fx-font-size: 16;");
+
         Label name = new Label(user.getName()+": "+this.getUserScore(user));
         name.setPadding(new Insets(0,0,10,0));
         name.setAlignment(Pos.CENTER);
@@ -62,17 +72,23 @@ public class GameScene {
 
         sections.getChildren().add(upper);
 
-        ArrayList<String> upperSectionCombos = this.getUpperSectionCombos(user);
+        String[] upperSectionCombos = user.getUpperSectionCombos();
 
         for (String combo : upperSectionCombos){
             Label comboName = new Label(combo);
             Label scoreForCombo = new Label(user.getScoreForCombo(init,combo,"upper"));
+
+            controller.getComboScoreToBind(scoreForCombo.getId(),upper.getText());
+            Bindings.bindBidirectional(scoreForCombo, );
+
             scoreForCombo.setId(combo);
             scoreForCombo.getStyleClass().add("scorebox");
             scoreForCombo.setPrefSize(20,20);
-            scoreForCombo.setOnMouseClicked(e ->{
-                controller.enterScore(scoreForCombo);
-            });
+            if (result.getId().equals(users[0].getName())) {
+                scoreForCombo.setOnMouseClicked(e -> {
+                    controller.enterScore(upper.getText(),comboName.getText());
+                });
+            }
             VBox sectionCombos = new VBox();
             sectionCombos.setPrefWidth(400);
             VBox sectionScores = new VBox();
@@ -87,7 +103,7 @@ public class GameScene {
 
         sections.getChildren().add(lower);
 
-        ArrayList<String> lowerSectionCombos = this.getLowerSectionCombos(user);
+        String[] lowerSectionCombos = user.getLowerSectionCombos();
         for (String combo : lowerSectionCombos){
             Label comboName = new Label(combo);
             Label scoreForCombo = new Label(user.getScoreForCombo(init,combo,"lower"));
@@ -103,38 +119,34 @@ public class GameScene {
             comboAndScore.getChildren().addAll(sectionCombos,sectionScores);
             comboAndScore.getStyleClass().add("sectionComboAndScore");
             sections.getChildren().addAll(comboAndScore);
-            scoreForCombo.setOnMouseClicked(e ->{
-                controller.enterScore(scoreForCombo);
-            });
+            if (result.getId().equals(users[0].getName())) {
+                scoreForCombo.setOnMouseClicked(e -> {
+                    controller.enterScore(lower.getText(),comboName.getText());
+                });
+            }
         }
         result.getChildren().add(sections);
         return result;
 
     }
     private String getUserScore(User user){
-        return user.getTotalScoreAsString();
+        return user.getTotalScore();
     }
-    private ArrayList<String> getUpperSectionCombos(User user){
-        ArrayList<String> upperSectionCombos = new ArrayList<>();
-
-        for (String key : user.getUpperSectionCombos()){
-            upperSectionCombos.add(key);
-        }
-        return upperSectionCombos;
-    }
-    private ArrayList<String> getLowerSectionCombos(User user){
-        ArrayList<String> lowerSectionCombos = new ArrayList<>();
-
-        for (String key : user.getLowerSectionKeySet()){
-            lowerSectionCombos.add(key);
-        }
-        return lowerSectionCombos;
-    }
-    private HBox renderDie(){
+    /*private HBox renderDie(){
         HBox result = new HBox(5);
+        result.setAlignment(Pos.CENTER);
         for (Dice dice : die){
             result.getChildren().add(dice);
         }
         return result;
     }
+    private HBox getInputOptions(){
+        HBox result = new HBox();
+        roll = new Button("Roll Again");
+        roll.setId("roll");
+        play = new Button("Play Hand");
+        play.setId("play");
+        result.getChildren().addAll(roll,play);
+        return result;
+    }*/
 }

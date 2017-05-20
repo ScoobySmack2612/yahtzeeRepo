@@ -1,4 +1,4 @@
-package SourcePackages.model;
+package SourcePackages.model.SubModels;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
@@ -9,15 +9,18 @@ import javafx.collections.ObservableMap;
 public class LowerSection {
     String[] combos = {"Three of a Kind", "Four of a Kind", "Full House","Small Straight","Large Straight","Ha-Yahtzee","Chance"};
 
-    ObservableMap<String, Integer> scores = FXCollections.observableHashMap();
+    ObservableMap<String, Integer> combosAndScores = FXCollections.observableHashMap();
     public LowerSection(){
         this.initScores();
     }
     private void initScores(){
         for (String combo: this.combos ){
-            scores.putIfAbsent(combo, 0);
+            combosAndScores.putIfAbsent(combo, 0);
         }
     }
     public String[] lowerKeys(){return this.combos;}
-    public ObservableMap<String, Integer> getScores(){return this.scores;}
+    public ObservableMap<String, Integer> getCombosAndScores(){return this.combosAndScores;}
+    public void enterScore(String comboName, int score){
+        combosAndScores.replace(comboName,score);
+    }
 }

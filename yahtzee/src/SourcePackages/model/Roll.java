@@ -1,13 +1,14 @@
 package SourcePackages.model;
 
+import SourcePackages.controller.SubControllers.Dice;
+
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Heron on 5/15/2017.
  */
 public class Roll {
+    //ObservableArray<Dice> die = FXCollections.observableList(randomRoll());
     ArrayList<Dice> roll = new ArrayList<>();
     public Roll(){
         this.initRoll();
@@ -21,9 +22,6 @@ public class Roll {
             Dice dice = new Dice(rand,x);
 
             roll.add(dice);
-
-            //First output -- shows all five dice values
-            System.out.println(dice.getValue());
         }
     }
     public ArrayList<Dice> getRoll(){return this.roll;}

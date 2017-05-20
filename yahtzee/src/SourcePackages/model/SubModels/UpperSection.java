@@ -1,4 +1,4 @@
-package SourcePackages.model;
+package SourcePackages.model.SubModels;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
@@ -20,5 +20,8 @@ public class UpperSection {
         }
     }
     public String[] upperKeys(){return this.combos;}
-    public ObservableMap<String, Integer> getUpperCombosAndScores(){return this.combosAndScores;}
+    public ObservableMap<String, Integer> getCombosAndScores(){return this.combosAndScores;}
+    public void enterScore(String comboName, int score){
+        combosAndScores.replace(comboName,score);
+    }
 }

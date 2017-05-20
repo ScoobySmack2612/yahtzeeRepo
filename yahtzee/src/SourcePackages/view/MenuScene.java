@@ -1,14 +1,12 @@
 package SourcePackages.view;
 
-import SourcePackages.controller.Game;
-import javafx.geometry.Insets;
+import SourcePackages.controller.MenuController;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -19,7 +17,9 @@ public class MenuScene {
     Stage window;
     boolean usernameEntered = false;
     String username;
-    public MenuScene(Stage window) {
+    MenuController controller;
+    public MenuScene(Stage window, MenuController controller) {
+        this.controller = controller;
         this.window = window;
         //menu
         Label w = new Label("Welcome");
@@ -59,7 +59,7 @@ public class MenuScene {
                 vb.getChildren().clear();
                 Button go = new Button("Let's Play");
                 go.setOnAction(ex -> {
-                    new Game(window,username);
+                    controller.handleStartButton(username);
                 });
                 vb.getChildren().add(go);
             });

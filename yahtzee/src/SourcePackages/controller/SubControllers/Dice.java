@@ -1,5 +1,6 @@
-package SourcePackages.model;
+package SourcePackages.controller.SubControllers;
 
+import javafx.collections.ObservableArray;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
@@ -23,8 +24,9 @@ public class Dice extends Rectangle{
         this.setId(Integer.toString(positionInRoll));
         this.setOnMouseClicked( e ->{
             clicked = this.getId();
+            System.out.println(clicked);
         });
     }
     public int getValue(){return this.value;}
-    public String getClicked(){System.out.println(clicked);return this.clicked;}
+    public String getClicked(){return this.clicked;}
 }
