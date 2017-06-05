@@ -20,12 +20,12 @@ public class Turn {
     public boolean checkIfTurnFinished(){
         return this.turnFinished;
     }
-    public ArrayList<Dice> rollDie(){
+    /*public ArrayList<Dice> rollDie(){
         if (!checkIfTurnFinished()){
             Roll roll = new Roll();
             this.rollsLeft--;
             return roll.getRoll();
         }
         return null;
-    }
+    }*/
 }

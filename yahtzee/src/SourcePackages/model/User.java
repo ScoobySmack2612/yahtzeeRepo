@@ -1,5 +1,9 @@
 package SourcePackages.model;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 /**
  * Created by Heron on 5/9/2017.
  */
@@ -19,11 +23,22 @@ public class User {
     public String getTotalScore(){ return sc.getTotalScoreAsString(); }
     public String[] getUpperSectionCombos(){return sc.getUpperSectionCombos();}
     public String[] getLowerSectionCombos(){return sc.getLowerSectionCombos();}
-    public String getScoreForCombo(boolean init, String comboName, String section){return sc.getScoreForCombo(init,comboName,section);}
-    public void enterScore(String section, String comboName){
-        sc.enterScoreForCombo(section,comboName);
+    public void enterScore(String section, String comboName, int score){
+        sc.enterScoreForCombo(section,comboName,score);
     }
-    public int bindScore(String section, String comboName){
-        sc.getScoreProp();
+    public StringProperty getScoreToBind(String section, String comboName){
+        String[] combos = sc.getUpperSectionCombos();
+        for (int x = 0; x < combos.length; x++){
+            if (combos[x].equals(comboName)) {
+                return sc.getScoreForCombo(section,comboName);
+            }
+        }
+        combos = sc.getLowerSectionCombos();
+        for (int x = 0; x < combos.length; x++){
+            if (combos[x].equals(comboName)){
+                return sc.getScoreForCombo(section,comboName);
+            }
+        }
+        return null;
     }
 }

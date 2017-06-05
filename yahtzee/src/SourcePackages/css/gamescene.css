@@ -10,3 +10,10 @@
     -fx-border-style: solid;
     -fx-min-width:20;
 }
+.clicked {
+    -fx-stroke: blue;
+    -fx-stroke-width:3;
+}
+.unclicked{
+    -fx-stroke: none;
+}

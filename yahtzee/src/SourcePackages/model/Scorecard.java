@@ -2,9 +2,8 @@ package SourcePackages.model;
 
 import SourcePackages.model.SubModels.LowerSection;
 import SourcePackages.model.SubModels.UpperSection;
-import javafx.collections.ObservableMap;
-
-import java.util.Set;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.StringProperty;
 
 /**
  * Created by Heron on 5/19/2017.
@@ -12,74 +11,66 @@ import java.util.Set;
 
 public class Scorecard {
     UpperSection us = new UpperSection();
-    ObservableMap<String, Integer> upperSection = us.getCombosAndScores();
     LowerSection ls = new LowerSection();
-    ObservableMap<String, Integer> lowerSection = ls.getCombosAndScores();
-    public Scorecard(){
-        this.initScorecard();
-    }
-    private void initScorecard(){
-        us = new UpperSection();
-        ls = new LowerSection();
-    }
-    public ObservableMap<String, Integer> getUpperSection(){
-        return us.getCombosAndScores();
-    }
-    public ObservableMap<String, Integer> getLowerSection(){
-        return ls.getCombosAndScores();
-    }
+
+    public Scorecard(){}
+
     public int tallyScores(){
-        Set<String> combos = upperSection.keySet();
+        int[] scores = us.getScores();
         int counter = 0;
-        for (String combo : combos){
-            if (upperSection.get(combo)!=null) {
-                int score = upperSection.get(combo);
-                counter = counter + score;
-            }
+        for (int score : scores){
+            counter = counter + score;
         }
-        combos = lowerSection.keySet();
-        for(String combo: combos){
-            if (lowerSection.get(combo)!=null) {
-                int score = lowerSection.get(combo);
-                counter = counter + score;
-            }
-        }
+        /*scores = ls.getScores();
+        for (IntegerProperty score : scores){
+            counter = counter + score.getValue();
+        }*/
         return counter;
     }
-    public String[] getUpperSectionCombos(){return us.upperKeys();}
-    public String[] getLowerSectionCombos(){return ls.lowerKeys();}
-    public int getUpperSectionScoreByKey(String valueForKey){return upperSection.get(valueForKey);}
-    public int getLowerSectionScoreByKey(String valueForKey){return lowerSection.get(valueForKey);}
-    public String getScoreForCombo(Boolean init, String key, String section){
-        if (section.equals("upper")){
-            try{
-                if (init && this.getUpperSectionScoreByKey(key)==0) {
-                    return "  ";
-                }else{
-                    return Integer.toString(this.getUpperSectionScoreByKey(key));
+    public String[] getUpperSectionCombos(){return us.getCombos();}
+    public String[] getLowerSectionCombos(){return ls.getCombos();}
+    public StringProperty getScoreForCombo(String section, String comboName){
+        if (section.equals("Upper Section")){
+            String[] combos = getUpperSectionCombos();
+            for (int x = 0; x < combos.length; x++){
+                if (combos[x].equals(comboName)) {
+                    StringProperty[] scores = us.getScoresAsProps();
+                    return scores[x];
                 }
-            }catch (Exception e){
-                System.out.println(e);
             }
-        }else if (section.equals("lower")){
-            try{
-                if (init && this.getLowerSectionScoreByKey(key)==0) {
-                    return "  ";
-                }else{
-                    return Integer.toString(this.getLowerSectionScoreByKey(key));
+        }else if (section.equals("Lower Section")){
+            String[] combos = getLowerSectionCombos();
+            for (int x = 0; x < combos.length; x++){
+                if (combos[x].equals(comboName)) {
+                    StringProperty[] scores = ls.getScoresAsProps();
+                    return scores[x];
                 }
-            }catch(Exception e){
-                e.printStackTrace();
             }
         }
         return null;
     }
     public String getTotalScoreAsString(){return Integer.toString(this.tallyScores());}
-    public void enterScoreForCombo(String section, String comboName){
-        if (section.contains("Upper")){
-            us.enterScore(comboName,5);
-        }else if (section.contains("Lower")){
-            ls.enterScore(comboName,5);
+    public void enterScoreForCombo(String section, String comboName,int score){
+        if (section.equals("Upper Section")){
+            String[] combos = us.getCombos();
+            for (int x = 0; x < combos.length; x++){
+                if (combos[x].equals(comboName)){
+                    StringProperty[] scoresAsProps = us.getScoresAsProps();
+                    int[] scores = us.getScores();
+                    scoresAsProps[x].setValue(Integer.toString(score));
+                    scores[x] = score;
+                }
+            }
+        }else if (section.equals("Lower Section")){
+            String[] combos = ls.getCombos();
+            for (int x = 0; x < combos.length; x++){
+                if (combos[x].equals(comboName)){
+                    StringProperty[] scoresAsProps = ls.getScoresAsProps();
+                    int[] scores = ls.getScores();
+                    scoresAsProps[x].setValue(Integer.toString(score));
+                    scores[x] = score;
+                }
+            }
         }
     }
 }

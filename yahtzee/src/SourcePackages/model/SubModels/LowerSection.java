@@ -1,5 +1,9 @@
 package SourcePackages.model.SubModels;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 
@@ -8,19 +12,21 @@ import javafx.collections.ObservableMap;
  */
 public class LowerSection {
     String[] combos = {"Three of a Kind", "Four of a Kind", "Full House","Small Straight","Large Straight","Ha-Yahtzee","Chance"};
+    int[] scores = {0,0,0,0,0,0,0};
 
-    ObservableMap<String, Integer> combosAndScores = FXCollections.observableHashMap();
-    public LowerSection(){
-        this.initScores();
-    }
-    private void initScores(){
-        for (String combo: this.combos ){
-            combosAndScores.putIfAbsent(combo, 0);
-        }
-    }
-    public String[] lowerKeys(){return this.combos;}
-    public ObservableMap<String, Integer> getCombosAndScores(){return this.combosAndScores;}
-    public void enterScore(String comboName, int score){
-        combosAndScores.replace(comboName,score);
-    }
+    StringProperty tok = new SimpleStringProperty(this, "Three O' Kind", "  ");
+    StringProperty fok = new SimpleStringProperty(this,"Four O' Kind"," ");
+    StringProperty fh = new SimpleStringProperty(this,"Full House","  ");
+    StringProperty ss = new SimpleStringProperty(this,"Small Straight","  ");
+    StringProperty ls = new SimpleStringProperty(this,"Large Straight","  ");
+    StringProperty hy = new SimpleStringProperty(this,"Ha-Yahtzee","  ");
+    StringProperty ch = new SimpleStringProperty(this,"Chance","  ");
+
+    StringProperty[] scoresAsProps = {tok,fok,fh,ss,ls,hy,ch};
+
+    public LowerSection(){}
+    public String[] getCombos(){return this.combos;}
+    public int[] getScores(){return this.scores;}
+    public StringProperty[] getScoresAsProps(){return this.scoresAsProps;}
+
 }
