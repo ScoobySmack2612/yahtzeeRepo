@@ -10,22 +10,14 @@ import java.util.ArrayList;
 
 public class Turn {
     int rollsLeft;
-    boolean turnFinished;
+
     public Turn(){
         this.initTurn();
     }
+
     private void initTurn(){
         this.rollsLeft = 3;
     }
-    public boolean checkIfTurnFinished(){
-        return this.turnFinished;
-    }
-    /*public ArrayList<Dice> rollDie(){
-        if (!checkIfTurnFinished()){
-            Roll roll = new Roll();
-            this.rollsLeft--;
-            return roll.getRoll();
-        }
-        return null;
-    }*/
+    public void rollTaken(){this.rollsLeft --;}
+    public int getRollsLeft(){return this.rollsLeft;}
 }

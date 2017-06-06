@@ -15,7 +15,7 @@ public class LowerSection {
     int[] scores = {0,0,0,0,0,0,0};
 
     StringProperty tok = new SimpleStringProperty(this, "Three O' Kind", "  ");
-    StringProperty fok = new SimpleStringProperty(this,"Four O' Kind"," ");
+    StringProperty fok = new SimpleStringProperty(this,"Four O' Kind","  ");
     StringProperty fh = new SimpleStringProperty(this,"Full House","  ");
     StringProperty ss = new SimpleStringProperty(this,"Small Straight","  ");
     StringProperty ls = new SimpleStringProperty(this,"Large Straight","  ");

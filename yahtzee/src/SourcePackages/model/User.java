@@ -1,6 +1,7 @@
 package SourcePackages.model;
 
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -11,20 +12,21 @@ import javafx.beans.property.StringProperty;
 public class User {
     String name;
     Scorecard sc;
-    String totalScore;
+    IntegerProperty score = new SimpleIntegerProperty(0);
 
     public User(String name){
         this.name = name;
         sc = new Scorecard();
-        this.initUser();
     }
-    private void initUser(){this.totalScore = sc.getTotalScoreAsString();}
     public String getName(){return this.name;}
-    public String getTotalScore(){ return sc.getTotalScoreAsString(); }
+    public void setScore(int score){this.score.set(score);}
+    public IntegerProperty getScore(){return this.score;}
     public String[] getUpperSectionCombos(){return sc.getUpperSectionCombos();}
     public String[] getLowerSectionCombos(){return sc.getLowerSectionCombos();}
     public void enterScore(String section, String comboName, int score){
         sc.enterScoreForCombo(section,comboName,score);
+
+        this.score.set(sc.tallyScores());
     }
     public StringProperty getScoreToBind(String section, String comboName){
         String[] combos = sc.getUpperSectionCombos();

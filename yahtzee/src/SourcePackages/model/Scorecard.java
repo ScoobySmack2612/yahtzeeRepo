@@ -16,16 +16,17 @@ public class Scorecard {
     public Scorecard(){}
 
     public int tallyScores(){
-        int[] scores = us.getScores();
-        int counter = 0;
-        for (int score : scores){
-            counter = counter + score;
+        int result = 0;
+        int[] upperScores = us.getScores();
+        int[] lowerScores = ls.getScores();
+
+        for (int score : upperScores){
+            result = result + score;
         }
-        /*scores = ls.getScores();
-        for (IntegerProperty score : scores){
-            counter = counter + score.getValue();
-        }*/
-        return counter;
+        for (int score : lowerScores){
+            result = result + score;
+        }
+        return result;
     }
     public String[] getUpperSectionCombos(){return us.getCombos();}
     public String[] getLowerSectionCombos(){return ls.getCombos();}
@@ -49,7 +50,6 @@ public class Scorecard {
         }
         return null;
     }
-    public String getTotalScoreAsString(){return Integer.toString(this.tallyScores());}
     public void enterScoreForCombo(String section, String comboName,int score){
         if (section.equals("Upper Section")){
             String[] combos = us.getCombos();

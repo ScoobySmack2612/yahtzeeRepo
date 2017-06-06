@@ -37,7 +37,7 @@ public class Scoring {
 
         for (int value : rollValues){
             if (value == 1){
-                result ++;
+                result +=1;
             }
         }
 
@@ -48,7 +48,7 @@ public class Scoring {
 
         for (int value : rollValues){
             if (value == 2){
-                result ++;
+                result +=2;
             }
         }
 
@@ -59,7 +59,7 @@ public class Scoring {
 
         for (int value : rollValues){
             if (value == 3){
-                result ++;
+                result +=3;
             }
         }
 
@@ -70,7 +70,7 @@ public class Scoring {
 
         for (int value : rollValues){
             if (value == 4){
-                result ++;
+                result +=4;
             }
         }
 
@@ -81,7 +81,7 @@ public class Scoring {
 
         for (int value : rollValues){
             if (value == 5){
-                result ++;
+                result +=5;
             }
         }
 
@@ -92,7 +92,7 @@ public class Scoring {
 
         for (int value : rollValues){
             if (value == 6){
-                result ++;
+                result +=6;
             }
         }
 
@@ -104,10 +104,9 @@ public class Scoring {
 
         for (int value : rollValues){
             diceValues[value] ++;
-            result = result + diceValues[value];
+            result = result + value;
         }
         for (int index = 1; index < diceValues.length; index++){
-            diceValues[index] ++;
             if (diceValues[index]==3){
                 duplicateValue = diceValues[index];
                 break;
@@ -124,10 +123,9 @@ public class Scoring {
 
         for (int value : rollValues){
             diceValues[value] ++;
-            result = result + diceValues[value];
+            result = result + value;
         }
         for (int index = 1; index < diceValues.length; index++){
-            diceValues[index] ++;
             if (diceValues[index]==4){
                 duplicateValue = diceValues[index];
                 break;
@@ -149,7 +147,6 @@ public class Scoring {
             result = result + diceValues[value];
         }
         for (int index = 1; index < diceValues.length; index++){
-            diceValues[index] ++;
             if (diceValues[index]==2){
                 pairValue = diceValues[index];
             }
@@ -172,10 +169,12 @@ public class Scoring {
         }
 
         Arrays.sort(this.rollValues);
-        for (int index = 1; index < diceValues.length; index++){
-            if ( rollValues[index+1] - rollValues[index] == 1){
-                counter ++;
+        for (int index = 0; index < rollValues.length-1; index++){
+
+            if ( rollValues[index+1] - rollValues[index] == 1) {
+                counter++;
             }
+
         }
         if (counter != 4){
             return 0;
@@ -192,9 +191,10 @@ public class Scoring {
         }
 
         Arrays.sort(this.rollValues);
-        for (int index = 1; index < diceValues.length; index++){
-            if ( rollValues[index+1] - rollValues[index] == 1){
-                counter ++;
+        for (int index = 0; index < rollValues.length-1; index++){
+
+            if ( rollValues[index+1] - rollValues[index] == 1) {
+                counter++;
             }
         }
         if (counter != 5){

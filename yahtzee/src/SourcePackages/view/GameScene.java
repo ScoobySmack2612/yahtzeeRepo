@@ -4,9 +4,7 @@ import SourcePackages.controller.GameController;
 import SourcePackages.controller.SubControllers.Scoring;
 import SourcePackages.model.User;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -63,10 +61,17 @@ public class GameScene {
         result.setPadding(new Insets(0,25,0,25));
         result.setStyle("-fx-font-size: 16;");
 
-        Label name = new Label(user.getName()+": "+this.getUserScore(user));
-        name.setPadding(new Insets(0,0,10,0));
-        name.setAlignment(Pos.CENTER);
-        result.getChildren().addAll(name);
+        Label userInfo = new Label(user.getName()+": 0");
+        userInfo.setPadding(new Insets(0,0,10,0));
+        userInfo.setAlignment(Pos.CENTER);
+        result.getChildren().addAll(userInfo);
+
+        IntegerProperty scoreLabel = new SimpleIntegerProperty(0);
+        IntegerProperty usersScore = controller.getUserScore(user);
+        scoreLabel.bind(usersScore);
+        usersScore.addListener( ( ((observable, oldValue, newValue) -> {
+            userInfo.setText(user.getName()+": "+Integer.toString(usersScore.getValue()));
+        })));
 
         VBox sections = new VBox();
 
@@ -88,24 +93,23 @@ public class GameScene {
             scoreForCombo.getStyleClass().add("scorebox");
             scoreForCombo.setPrefSize(20,20);
 
+            BooleanProperty isScoreToEnter = new SimpleBooleanProperty(false);
             scoreForCombo.setOnMouseEntered(e -> {
                 if (scoreForCombo.getText().equals("  ")) {
                     scoreForCombo.setText(Integer.toString(controller.getScoreForCombo(scoreForCombo.getId())));
                 }
             });
             scoreForCombo.setOnMouseExited(e -> {
-                if (scoreForCombo.getText().equals("  ")) {
+                if (!isScoreToEnter.getValue()){
                     scoreForCombo.setText("  ");
                 }
             });
+            scoreForCombo.setOnMouseClicked(e -> {
+                isScoreToEnter.set(true);
+                String[] sectionAndCombo = {upper.getText(), scoreForCombo.getId()};
+                controller.setComboToScore(sectionAndCombo);
+            });
 
-
-            if (result.getId().equals(users[0].getName())) {
-                scoreForCombo.setOnMouseClicked(e -> {
-                    String[] sectionAndCombo = {upper.getText(), scoreForCombo.getId()};
-                    controller.setComboToScore(sectionAndCombo);
-                });
-            }
             VBox sectionCombos = new VBox();
             sectionCombos.setPrefWidth(400);
             VBox sectionScores = new VBox();
@@ -124,7 +128,7 @@ public class GameScene {
         for (String combo : lowerSectionCombos){
             Label comboName = new Label(combo);
 
-            Label scoreForCombo = new Label("  ");
+            Label scoreForCombo = new Label();
             scoreForCombo.getStyleClass().add("scorebox");
             scoreForCombo.setId(combo);
             StringProperty scoreModel = user.getScoreToBind(lower.getText(),combo);
@@ -143,19 +147,28 @@ public class GameScene {
             comboAndScore.getChildren().addAll(sectionCombos,sectionScores);
             comboAndScore.getStyleClass().add("sectionComboAndScore");
             sections.getChildren().addAll(comboAndScore);
-            if (result.getId().equals(users[0].getName())) {
-                scoreForCombo.setOnMouseClicked(e -> {
-                    String[] sectionAndCombo = {lower.getText(), scoreForCombo.getId()};
-                    controller.setComboToScore(sectionAndCombo);
-                });
-            }
+
+            BooleanProperty isScoreToEnter = new SimpleBooleanProperty(false);
+            scoreForCombo.setOnMouseEntered(e -> {
+                if (scoreForCombo.getText().equals("  ")) {
+                    scoreForCombo.setText(Integer.toString(controller.getScoreForCombo(scoreForCombo.getId())));
+                }
+            });
+            scoreForCombo.setOnMouseExited(e -> {
+                if (!isScoreToEnter.getValue()){
+                    scoreForCombo.setText("  ");
+                }
+            });
+            scoreForCombo.setOnMouseClicked(e -> {
+                isScoreToEnter.set(true);
+                scoreForCombo.setText(Integer.toString(controller.getScoreForCombo(scoreForCombo.getId())));
+                String[] sectionAndCombo = {lower.getText(), scoreForCombo.getId()};
+                controller.setComboToScore(sectionAndCombo);
+            });
         }
         result.getChildren().add(sections);
         return result;
 
-    }
-    private String getUserScore(User user){
-        return user.getTotalScore();
     }
     private HBox renderDie(){
         HBox result = new HBox(5);
@@ -198,12 +211,23 @@ public class GameScene {
         roll = new Button("Roll Again");
         roll.setOnAction(e->{
             controller.rollDice();
+            if (controller.isTurnOver()){
+                play.setVisible(false);
+                roll.setVisible(false);
+            }
         });
         play = new Button("Enter Score");
         play.setOnAction(e -> {
             controller.enterScore(users[0]);
+            controller.setTurnFinished();
+            play.setVisible(false);
+            roll.setVisible(false);
         });
         result.getChildren().addAll(roll,play);
         return result;
+    }
+    public void showUserTurnElements(){
+        this.roll.setVisible(true);
+        this.play.setVisible(true);
     }
 }
