@@ -41,6 +41,7 @@ public class GameScene {
             VBox scoreCard = this.createScoreCard(user);
             scorecards.getChildren().add(scoreCard);
         }
+
         HBox input = this.getInputOptions();
         input.setAlignment(Pos.CENTER);
         HBox diceSection = this.renderDie();
@@ -211,23 +212,32 @@ public class GameScene {
         roll = new Button("Roll Again");
         roll.setOnAction(e->{
             controller.rollDice();
-            if (controller.isTurnOver()){
-                play.setVisible(false);
-                roll.setVisible(false);
-            }
         });
         play = new Button("Enter Score");
         play.setOnAction(e -> {
             controller.enterScore(users[0]);
-            controller.setTurnFinished();
-            play.setVisible(false);
-            roll.setVisible(false);
         });
+
+
+        BooleanProperty canRollDice = controller.getCanRollProperty();
+        BooleanProperty canEnterScore = controller.getCanScoreProperty();
+        BooleanProperty rollVisibility = new SimpleBooleanProperty(controller.getWhosTurn() == 1);
+        BooleanProperty playVisibility = new SimpleBooleanProperty(controller.getWhosTurn() == 1);
+
+        rollVisibility.bind(canRollDice);
+        playVisibility.bind(canEnterScore);
+
+        canRollDice.addListener(((observable, oldValue, newValue) -> {
+            roll.setVisible(canRollDice.getValue());
+        }));
+        canEnterScore.addListener(((observable, oldValue, newValue) -> {
+            play.setVisible(canEnterScore.getValue());
+        }));
+
+        roll.setVisible(canRollDice.getValue());
+        play.setVisible(canEnterScore.getValue());
+
         result.getChildren().addAll(roll,play);
         return result;
-    }
-    public void showUserTurnElements(){
-        this.roll.setVisible(true);
-        this.play.setVisible(true);
     }
 }

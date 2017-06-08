@@ -10,6 +10,8 @@ public class Scoring {
     int[] rollValues;
     int[] diceValues = new int[7];
 
+    public Scoring(){}
+
     public Scoring(String comboName,int[] rollValues){
         this.comboName = comboName;
         this.rollValues = rollValues;
@@ -229,5 +231,23 @@ public class Scoring {
             result = result + diceValues[value];
         }
         return result;
+    }
+    public int[] getAllScores(){
+        int[] scores = {
+                this.getOnes(),
+                this.getTwos(),
+                this.getThrees(),
+                this.getFours(),
+                this.getFives(),
+                this.getSixes(),
+                this.getTok(),
+                this.getFok(),
+                this.getFh(),
+                this.getSs(),
+                this.getLs(),
+                this.getHy(),
+                this.getChance()
+        };
+        return scores;
     }
 }

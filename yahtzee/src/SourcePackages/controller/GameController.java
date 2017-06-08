@@ -1,11 +1,16 @@
 package SourcePackages.controller;
 
+import SourcePackages.controller.SubControllers.AI;
 import SourcePackages.controller.SubControllers.Scoring;
 import SourcePackages.controller.SubControllers.Turn;
 import SourcePackages.model.Roll;
 import SourcePackages.model.User;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.scene.control.Button;
 import javafx.scene.shape.Rectangle;
+
+import java.util.Base64;
 
 /**
  * Created by Heron on 5/8/2017.
@@ -19,6 +24,7 @@ public class GameController {
     String[] sectionAndCombo;
     Turn turn;
     int whosTurn = 0;
+    Button play, rollDice;
 
     public GameController(User human, User ai){
         this.human = human;
@@ -28,6 +34,9 @@ public class GameController {
     private void initGame(){
         User[] users = {this.human,this.computer};
         this.setWhosTurn();
+        if (whosTurn == 2){
+            AI aiTurn = new AI(this);
+        }
     }
     public IntegerProperty getUserScore(User user){
         return user.getScore();
@@ -37,10 +46,9 @@ public class GameController {
     }
     public void rollDice(){
         roll.randomRoll(diceClicked);
-        if (!this.isTurnOver()) {
-            turn.rollTaken();
-            return;
-        }
+        turn.rollTaken();
+        System.out.println("Rolls left: "+ turn.getRollsLeft());
+        this.setRollVisibility();
     }
     public void dieClicked(Rectangle die) {
         if (die.getStyleClass().toString().equals("clicked")) {
@@ -65,7 +73,10 @@ public class GameController {
         int score = new Scoring(combo,diceValues).getScoreForCombo();
 
         user.enterScore(section, combo, score);
+
+        this.setWhosTurn();
     }
+    public int getWhosTurn(){return this.whosTurn;}
     private void setWhosTurn(){
         if (whosTurn == 0){
             whosTurn = (int) (Math.random() * ((2 - 1) + 1) + 1);
@@ -74,19 +85,29 @@ public class GameController {
         }else if ( whosTurn == 2){
             whosTurn = 1;
         }
+        if (whosTurn == 1){
+            human.setCanRollDice(true);
+            human.setCanEnterScore(true);
+            computer.setCanRollDice(false);
+            computer.setCanEnterScore(false);
+        }else {
+            human.setCanRollDice(false);
+            human.setCanEnterScore(false);
+            computer.setCanRollDice(true);
+            computer.setCanEnterScore(true);
+        }
         turn = new Turn();
         System.out.println(whosTurn);
     }
-    public boolean isTurnOver(){
-        boolean result = turn.getRollsLeft() == 0;
-        if (result){
-            this.setWhosTurn();
+    public BooleanProperty getCanRollProperty(){return human.getCanRollDice();}
+    public BooleanProperty getCanScoreProperty(){return human.getCanEnterScore();}
+    private void setRollVisibility(){
+        boolean canRoll = turn.getRollsLeft() > 0;
+        if (whosTurn == 1){
+            human.setCanRollDice(canRoll);
         }
-        return result;
     }
-    public boolean setTurnFinished(){
-        this.setWhosTurn();
-        return true;
-    }
-    public int getWhosTurn(){return this.whosTurn;}
+    public int[] getRollValues(){return roll.getDiceValues();}
+    public int[] getScoresForRoll(){ return new Scoring().getAllScores();}
 }
+

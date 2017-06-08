@@ -1,9 +1,6 @@
 package SourcePackages.model;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 
 /**
  * Created by Heron on 5/9/2017.
@@ -13,7 +10,8 @@ public class User {
     String name;
     Scorecard sc;
     IntegerProperty score = new SimpleIntegerProperty(0);
-
+    BooleanProperty canRollDice = new SimpleBooleanProperty(false);
+    BooleanProperty canEnterScore = new SimpleBooleanProperty(false);
     public User(String name){
         this.name = name;
         sc = new Scorecard();
@@ -43,4 +41,8 @@ public class User {
         }
         return null;
     }
+    public void setCanRollDice(boolean isTakingTurn){this.canRollDice.set(isTakingTurn);}
+    public BooleanProperty getCanRollDice(){return this.canRollDice;}
+    public void setCanEnterScore(boolean isTakingTurn){this.canEnterScore.set(isTakingTurn);}
+    public BooleanProperty getCanEnterScore(){return this.canEnterScore;}
 }
